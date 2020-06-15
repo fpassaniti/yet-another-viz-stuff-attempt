@@ -1,0 +1,273 @@
+<div>
+  <div
+    class="container"
+    ng-init="datasetid = '<% datasetid %>';
+
+              filters = <% filters %>;
+
+              view = '<% view %>';
+              fieldsList = <% fields %>;
+              fieldLink = 'wikipedia';
+              fieldLinkLabel = 'Lire l\'article';
+
+              cardTitle = 'titre';
+              fieldPhoto = 'image';
+              imagePosition = 'left';
+              itemsPerRow = '2';
+
+              ctxfields = {}
+              "
+  >
+    <ods-dataset-context
+      context="ctx"
+      ctx-domain="centralstore"
+      ctx-dataset="{{ datasetid }}"
+    >
+      <!-- Private datasets can be accessed by adding an API Key.
+        Add this param to the <ods-dataset-context above, 
+        where XXX is your apikey :
+          ctx-apikey="XXX"
+      -->
+      <h1 class="page-title">
+        {{ ctx.dataset.metas.title }}
+      </h1>
+
+      <p class="page-subtitle" ng-bind-html="ctx.dataset.metas.description"></p>
+
+      <span ng-repeat="field in ctx.dataset.fields">
+        {{ ctxfields[field.name] = field.label; '' }}
+      </span>
+
+      <div class="content-card search-module-container">
+        <!-- SEARCH -->
+        <div class="search-module">
+          <i class="fa fa-search search-module-icon" aria-hidden="true"></i>
+          <input
+            placeholder="Rechercher"
+            ng-model="ctx.parameters['q']"
+            ng-model-options="{ updateOn: 'keyup', debounce: { 'default': 300, 'blur': 0 }}"
+            class="search-module-input"
+            type="text"
+          />
+          <button
+            class="search-module-clear"
+            ng-if="ctx.parameters['q']"
+            ng-click="ctx.parameters['q'] = undefined"
+          >
+            <i class="fa fa-times-circle" aria-hidden="true"></i>
+          </button>
+        </div>
+
+        <!-- FILTERS -->
+        <div
+          class="filter-list"
+          ng-init="dropdown.open = '';
+                    select = {}"
+        >
+          <div ng-repeat="filter in filters">
+            {{ ctx.parameters['disjunctive.' + filter] = true; '' }}
+            <div
+              ods-facet-results="categories"
+              ods-facet-results-facet-name="{{ filter }}"
+              ods-facet-results-context="ctx"
+              ods-facet-results-sort="alphanum"
+            >
+              <div class="dropdown" ng-if="categories">
+                <button
+                  ng-click="dropdown.open = (dropdown.open == filter ? '' : filter);"
+                  ng-class="{'dropdown-button-active': select[filter],
+                                'dropdown-button-open': dropdown.open == filter}"
+                  id="dropdown-button"
+                  class="dropdown-button"
+                  aria-haspopup="true"
+                  aria-expanded="{{ dropdown.open == filter }}"
+                >
+                  {{ (!select[filter] ? ctxfields[filter] : select[filter] |
+                  capitalize) }}
+                </button>
+                <div
+                  class="mydropdown-menu"
+                  a
+                  ng-class="{'dropdown-visible' : dropdown.open == filter }"
+                  aria-labelledby="dropdown-button"
+                >
+                  <div class="dropdown-title">
+                    {{ ctxfields[filter] }}
+                  </div>
+                  <ul class="dropdown-items">
+                    <li class="dropdown-item">
+                      <label class="dropdown-label">
+                        <input
+                          ng-model="select[filter]"
+                          ng-value="Tous"
+                          type="radio"
+                          class="dropdown-input"
+                        />
+                        Tous
+                      </label>
+                    </li>
+                    <li
+                      ng-repeat="category in categories"
+                      class="dropdown-item"
+                    >
+                      <label
+                        class="dropdown-label"
+                        title="{{ category.path | capitalize }}"
+                      >
+                        <input
+                          ng-model="select[filter]"
+                          ng-value="category.path"
+                          class="dropdown-input"
+                          type="radio"
+                        />
+                        {{ category.path | capitalize }}
+                      </label>
+                    </li>
+                  </ul>
+                  {{ ctx.parameters['refine.' + filter] =
+                  (select[filter]=='Tous'?undefined:select[filter]); ''}}
+                </div>
+                <div
+                  class="dropdown-backdrop"
+                  ng-click="dropdown.open = ''"
+                  ng-show="dropdown.open != ''"
+                ></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- KPIs -->
+      <section class="kpis-container row row-equal-height">
+        <div
+          class="{{ 'col-md-' + (12/itemsPerRow) }} margin-bottom-20"
+          ng-repeat="kpi in kpis"
+        >
+          <!-- KPI box component -->
+          <div
+            class="kpi-card"
+            ods-aggregation="agg"
+            ods-aggregation-context="ctx"
+            ods-aggregation-function="{{ kpi.function }}"
+            ods-aggregation-expression="{{ kpi.expression }}"
+          >
+            <i
+              class="kpi-icon fa fa-{{ kpi.faicon || 'gitlab' }}"
+              aria-hidden="true"
+            ></i>
+            <h2 class="kpi-title">
+              {{ agg | number : (kpi.precision || 0) }}
+              <span ng-if="kpi.unit" class="kpi-unit">{{ kpi.unit }}</span>
+            </h2>
+            <p class="kpi-description">
+              {{ kpi.title }}
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- TABLE -->
+      <section ng-if="view == 'table'" class="content-card">
+        <div class="table-module">
+          <table
+            class="table-basic"
+            ods-results="items"
+            ods-results-context="ctx"
+            ods-results-max="20"
+          >
+            <thead>
+              <tr>
+                <th ng-repeat="field in fieldsList">
+                  {{ ctxfields[field] }}
+                </th>
+                <th ng-if="fieldLink"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="item in items">
+                <td
+                  ng-repeat="field in fieldsList"
+                  style="max-width: calc(100vh / {{ fieldsList.length }});"
+                  title="{{ item.fields[field] }}"
+                >
+                  {{ item.fields[field] }}
+                </td>
+                <td ng-if="fieldLink">
+                  <a
+                    href="{{ item.fields[fieldLink] }}"
+                    tilte="{{ fieldLinkLabel }}"
+                    target="_blanck"
+                    class="table-dropdown-button"
+                  >
+                    <i class="fa fa-external-link"></i>
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- CARDS -->
+      <section ng-if="view == 'cards'">
+        <div
+          class="row row-equal-height"
+          ods-results="items"
+          ods-results-context="ctx"
+          ods-results-max="{{ 8 * itemsPerRow }}"
+        >
+          <div
+            ng-repeat="item in items"
+            class="{{ 'col-md-' + (12/itemsPerRow) }} margin-bottom-20"
+          >
+            <div
+              class="content-card"
+              ng-class="{'content-card-horizontal': imagePosition === 'left' }"
+            >
+              <div
+                class="content-card-img"
+                ng-if="item.fields[fieldPhoto]"
+                style="{{ 'background-image: url(https://' + domainid + '.opendatasoft.com/explore/dataset/' + datasetid + '/files/' + item.fields[fieldPhoto].id + '/300/);' }}"
+              ></div>
+              <div class="content-card-body">
+                <h2 class="content-card-title text-center">
+                  {{ item.fields[cardTitle] }}
+                </h2>
+                <div class="content-card-fields">
+                  <dl>
+                    <dt ng-repeat-start="field in fieldsList">
+                      {{ ctxfields[field] }}
+                    </dt>
+                    <dd ng-repeat-end>{{ item.fields[field] }}</dd>
+                  </dl>
+                </div>
+                <div ng-if="fieldLink" class="text-center">
+                  <!-- fieldLink is used here
+                For more advanced scenario, you can send the user to :
+
+                - the dataset table filtered with the fieldLink value, through a text query
+                href="/explore/dataset/{{ datasetid }}/table?q={{ item.fields[fieldLink] }}"
+
+                - the dataset table filtered with the fieldLink value, through a refine on the field
+                href="/explore/dataset/{{ datasetid }}/table?refine.{{ fieldLink }}={{ item.fields[fieldLink] }}"
+
+                - a page using url-sync=true setting :
+                href="/pages/yourpage/?refine.{{ fieldLink }}={{ item.fields[fieldLink] }}"
+                -->
+                  <a
+                    href="{{ item.fields[fieldLink] }}"
+                    target="_blanck"
+                    class="content-card-button"
+                  >
+                    {{ fieldLinkLabel }}
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </ods-dataset-context>
+  </div>
+</div>
