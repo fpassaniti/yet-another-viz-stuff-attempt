@@ -32,7 +32,7 @@ module.exports = {
     contentBase: path.join(__dirname, 'public'),
     compress: false,
     port: process.env.PORT || 9000,
-    setup: function(app,server) {
+    before: function(app,server,compiler) {
       app.get("/templates/list-gen", function (request, response) {
         response.sendFile(__dirname + '/src/list-gen.html');
       });
