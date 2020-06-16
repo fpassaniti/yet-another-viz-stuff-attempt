@@ -7,25 +7,29 @@
   "description": "What am I about?",
   "main": "server.js",
   "scripts": {
-    "start": "rimraf ./public && webpack && node server.js"
+    "start": "webpack-dev-server",
+    "heroku-postbuild": "webpack -p",
+    "glitch": "rimraf ./public && webpack && node server.js"
   },
   "dependencies": {
-    "sortablejs": "^1.10.2",
-    "express": "^4.15.2",
-    "mustache": "^4.0.1",
     "@tarekraafat/autocomplete.js": "^7.2.0",
+    "bootstrap": "^4.5.0",
+    "express": "^4.15.2",
     "jquery": "^3.5.1",
+    "mustache": "^4.0.1",
     "popper": "^1.0.1",
-    "bootstrap": "^4.5.0"
+    "popper.js": "^1.16.1",
+    "sortablejs": "^1.10.2"
   },
   "devDependencies": {
-    "style-loader": "^0.16.1",
     "css-loader": "^0.27.3",
-    "webpack": "*",
-    "webpack-dev-server": "*",
+    "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "html-webpack-plugin": "*",
-    "extract-text-webpack-plugin": "^2.1.0",
-    "rimraf": "^2.6.1"
+    "rimraf": "^2.6.1",
+    "style-loader": "^0.16.1",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "*"
   },
   "engines": {
     "node": "6.9.x"

@@ -40,7 +40,9 @@ li.autoComplete_result:hover {
 }
 
 
-
+.metas-drop-placeholder {
+  background-color: orangered;
+}
 
 
 

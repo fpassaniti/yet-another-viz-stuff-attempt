@@ -27,5 +27,15 @@ module.exports = {
   plugins: [
     new ExtractTextPlugin({filename: "[name].css", allChunks: true}),
     new HtmlWebpackPlugin({template: "./src/index.html"})
-  ]
+  ],
+  devServer: {
+    contentBase: path.join(__dirname, 'public'),
+    compress: false,
+    port: 9000,
+    setup: function(app,server) {
+      app.get("/templates/list-gen", function (request, response) {
+        response.sendFile(__dirname + '/src/list-gen.html');
+      });
+    }
+  }
 }
