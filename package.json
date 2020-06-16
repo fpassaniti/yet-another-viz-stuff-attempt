@@ -19,9 +19,7 @@
     "mustache": "^4.0.1",
     "popper": "^1.0.1",
     "popper.js": "^1.16.1",
-    "sortablejs": "^1.10.2"
-  },
-  "devDependencies": {
+    "sortablejs": "^1.10.2",
     "css-loader": "^0.27.3",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "html-webpack-plugin": "*",
