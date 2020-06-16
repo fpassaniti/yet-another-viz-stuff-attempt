@@ -1,7 +1,6 @@
-import "./normalize.css";
 import "./ods.css";
-
 import "./style.css";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 var $ = require("jquery");
 
@@ -102,7 +101,6 @@ new autoComplete({
       }
     });
 });
-
 
 const Sortable = require("sortablejs").Sortable;
 
