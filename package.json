@@ -7,7 +7,7 @@
   "description": "What am I about?",
   "main": "server.js",
   "scripts": {
-    "start": "webpack-dev-server --port $PORT",
+    "start": "webpack-dev-server --port $PORT --host 0.0.0.0",
     "heroku-postbuild": "webpack -p",
     "glitch": "rimraf ./public && webpack && node server.js"
   },
