@@ -7,13 +7,11 @@ var ulavailablefilters = document.getElementById("availablefilters");
 var ulfilters = document.getElementById("filters");
 
 new Sortable(ulavailablemetas, {
-    ghostClass: "metas-drop-placeholder",
     group: "metas",
     pull: "clone",
     animation: 150
 });
 new Sortable(ulmetas, {
-    ghostClass: "metas-drop-placeholder",
     group: "metas",
     animation: 150
 });
