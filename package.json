@@ -34,6 +34,9 @@
   "repository": {
     "url": "https://github.com/fpassaniti/yet-another-viz-stuff-attempt"
   },
+  "engines": {
+    "node": "12.x"
+  },
   "license": "MIT",
   "keywords": [
     "node",
