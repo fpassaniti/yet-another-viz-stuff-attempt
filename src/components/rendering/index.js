@@ -1,6 +1,6 @@
 var Mustache = require("mustache");
 
-$("#render").on("click", function() {
+const render = function () {
     var settings = {};
 
     settings["datasetid"] = app.datasetid;
@@ -8,22 +8,26 @@ $("#render").on("click", function() {
 
     settings["filters"] = '';
     var tmpfilters = [];
-    document.getElementById('filters').childNodes.forEach(function (child) {
-        tmpfilters.push(child.id);
+    app.filters.forEach(function (filter) {
+        if (!tmpfilters.includes(filter.id)) {
+            tmpfilters.push(filter.id);
+        }
     });
     if (tmpfilters.length > 0)
-        settings["filters"] = '[\'' + tmpfilters.join('\',\'') + '\']';
+        settings["filters"] = "['" + tmpfilters.join("','") + "']";
     else
-        settings["filters"] = '\'\'';
+        settings["filters"] = '[]';
 
     settings["fields"] = '';
     var tmpfields = [];
-    document.getElementById('metas').childNodes.forEach(function (child) {
-        tmpfields.push(child.id);
+    app.metas.forEach(function (meta) {
+        if (!tmpfields.includes(meta.id)) {
+            tmpfields.push(meta.id);
+        }
     });
     settings["fields"] = '[\'' + tmpfields.join('\',\'') + '\']';
 
-    $.get("templates/list-gen", function(templates) {
+    $.get("templates/list-gen", function (templates) {
         var template = $(templates).html();
         var customTags = ["<%", "%>"];
         app.output = Mustache.render(template, settings, {}, customTags);
@@ -39,8 +43,10 @@ $("#render").on("click", function() {
         angular
             .element(appelem)
             .injector()
-            .invoke(['$rootScope', '$compile', function($rootScope, $compile) {
+            .invoke(['$rootScope', '$compile', function ($rootScope, $compile) {
                 var res = $compile(el)($rootScope);
             }]);
     });
-});
+};
+
+module.exports = { render };

@@ -2,11 +2,6 @@
   background-color: white;
 }
 
-
-.app-container {
-  border-top: 2px solid darkgrey;
-}
-
 .centered {
     text-align: center;
 }
@@ -27,26 +22,9 @@ li.autoComplete_result:hover {
     cursor: pointer;
 }
 
-.list-group-smaller {
-  border: 2px dashed;
-  min-height: 20px;
-}
-.list-group-smaller .list-group-item {
-    padding: .35rem 1rem;
-}
-
 #render {
     margin: 1rem;
 }
-
-
-.metas-drop-placeholder {
-  background-color: orangered;
-}
-
-
-
-
 
 
 
@@ -192,7 +170,6 @@ body {
 
 .dropdown {
   display: inline-block;
-  margin: 13px 0 0 0;
   position: relative;
 }
 
@@ -413,6 +390,9 @@ body {
   text-decoration: none;
 }
 
+.content-card #filter-list {
+  margin-top: 13px;
+}
 
 /* KPI Card
 ========================================================================== */

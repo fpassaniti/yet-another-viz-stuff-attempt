@@ -59,11 +59,10 @@
         </div>
 
         <!-- FILTERS -->
-        <div
+        <div id="filter-list"
           class="filter-list"
           ng-init="dropdown.open = '';
-                    select = {}"
-        >
+                    select = {}">
           <div ng-repeat="filter in filters">
             {{ ctx.parameters['disjunctive.' + filter] = true; '' }}
             <div
@@ -234,12 +233,12 @@
                 <h2 class="content-card-title text-center">
                   {{ item.fields[cardTitle] }}
                 </h2>
-                <div class="content-card-fields">
-                  <dl>
-                    <dt ng-repeat-start="field in fieldsList">
+                <div id="content-card-fields" class="content-card-fields">
+                  <dl ng-repeat="field in fieldsList">
+                    <dt>
                       {{ ctxfields[field] }}
                     </dt>
-                    <dd ng-repeat-end>{{ item.fields[field] }}</dd>
+                    <dd>{{ item.fields[field] }}</dd>
                   </dl>
                 </div>
                 <div ng-if="fieldLink" class="text-center">

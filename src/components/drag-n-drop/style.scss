@@ -1,0 +1,52 @@
+.fields {
+}
+
+.list-group-item {
+  padding: .35rem 1rem;
+}
+
+
+.fields, .filter-list, .content-card-fields {
+  width: 100%;
+  list-style: none;
+  padding-left: 0;
+
+  .field {
+    padding: .37rem 1rem;
+    margin-bottom: 0.2em;
+    font-size: 1rem;
+    color: var(--text);
+    background-color: white;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border: 1px solid #cbd2db;
+    transition: all .2s;
+
+    :hover, :focus {
+      color: var(--links);
+      border-color: var(--links);
+    }
+  }
+
+  .filter {
+    border: 1px solid #cbd2db;
+    border-radius: 2rem;
+    transition: all .2s;
+
+    &:hover, &:focus {
+      color: var(--links);
+      border-color: var(--links);
+    }
+  }
+
+  .meta {
+
+  }
+}
+
+
+.dnd__dropzone {
+  background-color: rgba(225, 255, 229, 0.54);
+  min-height: 15px;
+  border: 2px dashed;
+}
