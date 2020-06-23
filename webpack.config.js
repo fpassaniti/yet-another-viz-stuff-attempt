@@ -1,4 +1,5 @@
 const path = require("path");
+const fs = require("fs");
 
 const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
@@ -63,8 +64,13 @@ module.exports = {
         compress: false,
         port: process.env.PORT || 9000,
         before: function (app, server, compiler) {
-            app.get("/templates/list-gen", function (request, response) {
-                response.sendFile(__dirname + '/src/list-gen.html');
+            fs.readdir(path.join(__dirname, "src", "templates"), function (err, files) {
+                if (err) { return console.log('Unable to scan directory: ' + err);}
+                files.forEach(function (file) {
+                    app.get("/templates/" + file.replace(".html",""), function (request, response) {
+                        response.sendFile(path.join(__dirname, "src", "templates", file));
+                    });
+                });
             });
         }
     }

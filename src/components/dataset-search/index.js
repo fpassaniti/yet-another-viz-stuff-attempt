@@ -2,9 +2,10 @@ const autoComplete = require("@tarekraafat/autocomplete.js/dist/js/autoComplete"
 
 var dnd = require('../../components/drag-n-drop');
 var rendering = require('../../components/rendering');
+const wysiwyg = require('../../components/wysiwyg');
 
 
-const loadAC = function (dnd) {
+const loadAC = function (dnd, reset) {
     app.ac = new autoComplete({
         data: {
             // Data src [Array, Function, Async] | (REQUIRED)
@@ -48,7 +49,12 @@ const loadAC = function (dnd) {
             document.querySelector("#autoComplete_list").appendChild(result);
         },
         onSelection: feedback => {
+            reset();
+
             app.datasetid = feedback.selection.value.datasetid;
+            app.title = feedback.selection.value.metas.title;
+            app.description = feedback.selection.value.metas.description;
+
             document.querySelector(".selection").innerHTML = app.datasetid;
             document.querySelector("#autoComplete").value = "";
             // Change placeholder with the selected value
@@ -61,8 +67,9 @@ const loadAC = function (dnd) {
             var availablemetas = $("#availablemetas");
             availablemetas.html("");
 
-            rendering.render();
+            rendering.renderInit();
             dnd.loadDnD(rendering);
+            wysiwyg.loadWYSIWYG();
 
             feedback.selection.value.fields.forEach(function (field) {
                 var li = document.createElement("li");

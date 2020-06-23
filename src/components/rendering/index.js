@@ -1,59 +1,60 @@
+const $ = require("jquery");
+
 var Mustache = require("mustache");
-var spinner = require('../../components/spinner');
 
-const render = function () {
-    spinner.on();
-
+const renderInit = function () {
     var settings = {};
 
     settings["datasetid"] = app.datasetid;
     settings["view"] = document.getElementById("view").value;
 
-    settings["filters"] = '';
-    var tmpfilters = [];
-    app.filters.forEach(function (filter) {
-        if (!tmpfilters.includes(filter.id)) {
-            tmpfilters.push(filter.id);
-        }
-    });
-    if (tmpfilters.length > 0)
-        settings["filters"] = "['" + tmpfilters.join("','") + "']";
-    else
-        settings["filters"] = '[]';
+    settings["filters"] = '[]';
+    settings["fields"] = '[]';
 
-    settings["fields"] = '';
-    var tmpfields = [];
-    app.metas.forEach(function (meta) {
-        if (!tmpfields.includes(meta.id)) {
-            tmpfields.push(meta.id);
-        }
-    });
-    settings["fields"] = '[\'' + tmpfields.join('\',\'') + '\']';
+    var appelem = $('#app');
+    appelem.html('');
 
-    $.get("templates/list-gen", function (templates) {
-        var template = $(templates).html();
-        var customTags = ["<%", "%>"];
-        app.output = Mustache.render(template, settings, {}, customTags);
+    settings['title'] = app.title;
 
-        var appelem = document.getElementById("app");
-        appelem.innerHTML = ''; // cleanup before appending the new one
+    Promise.all([
+        fetch('templates/list-gen'),
+        fetch('templates/list-gen-intro')
+    ]).then(responses => {
+        Promise.all(responses.map(response => { return response.text() })).then(htmls => {
+            var customTags = ["<%", "%>"];
+            var tmpoutput = Mustache.render(htmls[0], settings, {}, customTags);
+            app.intro = Mustache.render(htmls[1], settings, {}, customTags);
 
-        var el = document.createElement("div");
-        el.id = 'output';
-        el.innerHTML = app.output;
-        appelem.append(el);
+            var tmpoutputel = $(tmpoutput);
+            var intro = tmpoutputel.find('#intro');
+            intro.html(app.intro);
+            intro.find('#description').html(app.description);
 
-        angular
-            .element(appelem)
-            .injector()
-            .invoke(['$rootScope', '$compile', function ($rootScope, $compile) {
-                return res = $compile(el)($rootScope);
-            }]);
+            tmpoutputel.attr('id','output');
+            appelem.append(tmpoutputel);
 
-        angular.element(document).ready(function () {
-            spinner.off();
+            angular
+                .element(appelem)
+                .injector()
+                .invoke(['$rootScope', '$compile', function ($rootScope, $compile) {
+                    console.log($rootScope.$root);
+                    return $compile(tmpoutputel)($rootScope);
+                }]);
+
+            app.output = tmpoutputel.html();
         });
     });
 };
 
-module.exports = { render };
+const renderUpdate = function (key, value) {
+    angular
+        .element($('#app'))
+        .injector()
+        .invoke(['$rootScope', '$compile', function ($rootScope, $compile) {
+            $rootScope.$apply(function () {
+                $rootScope[key] = value;
+            });
+        }]);
+}
+
+module.exports = { renderInit, renderUpdate };

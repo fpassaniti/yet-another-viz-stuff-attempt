@@ -1,12 +1,8 @@
-.fields {
-}
-
 .list-group-item {
   padding: .35rem 1rem;
 }
 
-
-.fields, .filter-list, .content-card-fields {
+.fields, .filter-list, .content-card-fields, .content-card-title {
   width: 100%;
   list-style: none;
   padding-left: 0;
@@ -49,4 +45,10 @@
   background-color: rgba(225, 255, 229, 0.54);
   min-height: 15px;
   border: 2px dashed;
+  margin-bottom: 5px;
+
+  &.content-card-title {
+    max-width: 70%;
+    margin: 0 auto 10px auto;
+  }
 }

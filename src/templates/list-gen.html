@@ -24,15 +24,12 @@
       ctx-dataset="{{ datasetid }}"
     >
       <!-- Private datasets can be accessed by adding an API Key.
-        Add this param to the <ods-dataset-context above, 
+        Add this param to the <ods-dataset-context above,
         where XXX is your apikey :
           ctx-apikey="XXX"
       -->
-      <h1 class="page-title">
-        {{ ctx.dataset.metas.title }}
-      </h1>
-
-      <p class="page-subtitle" ng-bind-html="ctx.dataset.metas.description"></p>
+      <div id="intro">
+      </div>
 
       <span ng-repeat="field in ctx.dataset.fields">
         {{ ctxfields[field.name] = field.label; '' }}

@@ -1,0 +1,14 @@
+.inactive ~ .ql-container > .ql-editor {
+  padding:0;
+  line-height:inherit;
+}
+
+.ql-toolbar.inactive {
+  display:none;
+}
+
+.inactive ~ .ql-container.ql-snow {
+  border:none;
+  font-family:inherit;
+  font-size:inherit;
+}
