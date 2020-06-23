@@ -1,6 +1,9 @@
 var Mustache = require("mustache");
+var spinner = require('../../components/spinner');
 
 const render = function () {
+    spinner.on();
+
     var settings = {};
 
     settings["datasetid"] = app.datasetid;
@@ -44,8 +47,12 @@ const render = function () {
             .element(appelem)
             .injector()
             .invoke(['$rootScope', '$compile', function ($rootScope, $compile) {
-                var res = $compile(el)($rootScope);
+                return res = $compile(el)($rootScope);
             }]);
+
+        angular.element(document).ready(function () {
+            spinner.off();
+        });
     });
 };
 

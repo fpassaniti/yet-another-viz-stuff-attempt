@@ -1,0 +1,242 @@
+$identity-100: lightblue;
+$identity-200: blue;
+$light-100: orange;
+$light-700: red;
+
+$viewbox-size: 34;
+$circle-size: 15;
+
+$move-duration: 0.2;
+$move-delay: 0.6;
+
+$total-duration-move: $move-duration + $move-delay;
+$total-duration: $total-duration-move * 4;
+$circle-percent-size: percentage($circle-size / $viewbox-size);
+
+div#rods-spinner {
+  position: relative;
+  height: 150px;
+  width: 150px;
+  display: none;
+
+  .rods-spinner--on {
+    display: inherit;
+  }
+}
+
+.rods-spinner__circle {
+  animation-duration: #{$total-duration}s;
+  animation-iteration-count: infinite;
+  animation-timing-function: cubic-bezier(0.62, 0.86, 0.58, 1);
+  animation-fill-mode: forwards;
+}
+
+circle.rods-spinner__circle {
+  stroke-width: 0;
+}
+
+div.rods-spinner__circle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  height: $circle-percent-size;
+  width: $circle-percent-size;
+  border-radius: 50%;
+}
+
+
+circle.rods-spinner__circle--c1 {
+  animation-name: rods-spinner-c1;
+}
+circle.rods-spinner__circle--c2 {
+  animation-name: rods-spinner-c2;
+}
+circle.rods-spinner__circle--c3 {
+  animation-name: rods-spinner-c3;
+}
+circle.rods-spinner__circle--c4 {
+  animation-name: rods-spinner-c4;
+}
+
+div.rods-spinner__circle--c1 {
+  animation-name: rods-spinner-ie-c1;
+}
+div.rods-spinner__circle--c2 {
+  animation-name: rods-spinner-ie-c2;
+}
+div.rods-spinner__circle--c3 {
+  animation-name: rods-spinner-ie-c3;
+}
+div.rods-spinner__circle--c4 {
+  animation-name: rods-spinner-ie-c4;
+}
+
+.rods-spinner--light-700 {
+  .rods-spinner__circle--c1,
+  .rods-spinner__circle--c3 {
+    opacity: 0.6;
+  }
+  div.rods-spinner__circle {
+    background-color: $light-700;
+  }
+  circle.rods-spinner__circle {
+    fill: $light-700;
+  }
+}
+
+.rods-spinner--light-100 {
+  .rods-spinner__circle--c1,
+  .rods-spinner__circle--c3 {
+    opacity: 0.6;
+  }
+  div.rods-spinner__circle {
+    background-color: $light-100;
+  }
+  circle.rods-spinner__circle {
+    fill: $light-100;
+  }
+}
+
+.rods-spinner--identity-200 {
+  .rods-spinner__circle--c1,
+  .rods-spinner__circle--c3 {
+    opacity: 0.6;
+  }
+  div.rods-spinner__circle {
+    background-color: $identity-200;
+  }
+  circle.rods-spinner__circle {
+    fill: $identity-200;
+  }
+}
+
+.rods-spinner--polychrome {
+  div.rods-spinner__circle--c1,
+  div.rods-spinner__circle--c3 {
+    background-color: $identity-200;
+  }
+  div.rods-spinner__circle--c2,
+  div.rods-spinner__circle--c4 {
+    background-color: $identity-100;
+  }
+  circle.rods-spinner__circle--c1,
+  circle.rods-spinner__circle--c3 {
+    fill: $identity-200;
+  }
+  circle.rods-spinner__circle--c2,
+  circle.rods-spinner__circle--c4 {
+    fill: $identity-100;
+  }
+}
+
+$wait-1: percentage($move-delay / $total-duration);
+$frame-1: $wait-1 + percentage($move-duration / $total-duration);
+$wait-2: $frame-1 + percentage($move-delay / $total-duration);
+$frame-2: $wait-2 + percentage($move-duration / $total-duration);
+$wait-3: $frame-2 + percentage($move-delay / $total-duration);
+$frame-3: $wait-3 + percentage($move-duration / $total-duration);
+$wait-4: $frame-3 + percentage($move-delay / $total-duration);
+$frame-4: $wait-4 + percentage($move-duration / $total-duration);
+
+@mixin topleft {
+  transform: translate(0px, 0px);
+  top: 0;
+  left: 0;
+}
+@mixin topright {
+  transform: translate(19px, 0px);
+  top: 0;
+  left: 100% - $circle-percent-size;
+}
+@mixin bottomright {
+  transform: translate(19px, 19px);
+  top: 100% - $circle-percent-size;
+  left: 100% - $circle-percent-size;
+}
+@mixin bottomleft {
+  transform: translate(0px, 19px);
+  top: 100% - $circle-percent-size;
+  left: 0;
+}
+
+@mixin topleft-ie {
+  top: 0;
+  left: 0;
+}
+@mixin topright-ie {
+  top: 0;
+  left: 100% - $circle-percent-size;
+}
+@mixin bottomright-ie {
+  top: 100% - $circle-percent-size;
+  left: 100% - $circle-percent-size;
+}
+@mixin bottomleft-ie {
+  top: 100% - $circle-percent-size;
+  left: 0;
+}
+
+
+@keyframes rods-spinner-c1 {
+  0%, #{$wait-1} { @include topleft}
+  #{$frame-1}, #{$wait-2} { @include topright}
+  #{$frame-2}, #{$wait-3} { @include bottomright}
+  #{$frame-3}, #{$wait-4} { @include bottomleft }
+  #{$frame-4}, 100% { @include topleft }
+}
+
+@keyframes rods-spinner-c2 {
+  0%, #{$wait-1} { @include topright}
+  #{$frame-1}, #{$wait-2} { @include bottomright}
+  #{$frame-2}, #{$wait-3} { @include bottomleft}
+  #{$frame-3}, #{$wait-4} { @include topleft }
+  #{$frame-4}, 100% { @include topright }
+}
+
+@keyframes rods-spinner-c3 {
+  0%, #{$wait-1} { @include bottomright}
+  #{$frame-1}, #{$wait-2} { @include bottomleft}
+  #{$frame-2}, #{$wait-3} { @include topleft}
+  #{$frame-3}, #{$wait-4} { @include topright }
+  #{$frame-4}, 100% { @include bottomright }
+}
+
+@keyframes rods-spinner-c4 {
+  0%, #{$wait-1} { @include bottomleft}
+  #{$frame-1}, #{$wait-2} { @include topleft}
+  #{$frame-2}, #{$wait-3} { @include topright}
+  #{$frame-3}, #{$wait-4} { @include bottomright }
+  #{$frame-4}, 100% { @include bottomleft }
+}
+
+@keyframes rods-spinner-ie-c1 {
+  0%, #{$wait-1} { @include topleft-ie}
+  #{$frame-1}, #{$wait-2} { @include topright-ie}
+  #{$frame-2}, #{$wait-3} { @include bottomright-ie}
+  #{$frame-3}, #{$wait-4} { @include bottomleft-ie }
+  #{$frame-4}, 100% { @include topleft-ie }
+}
+
+@keyframes rods-spinner-ie-c2 {
+  0%, #{$wait-1} { @include topright-ie}
+  #{$frame-1}, #{$wait-2} { @include bottomright-ie}
+  #{$frame-2}, #{$wait-3} { @include bottomleft-ie}
+  #{$frame-3}, #{$wait-4} { @include topleft-ie }
+  #{$frame-4}, 100% { @include topright-ie }
+}
+
+@keyframes rods-spinner-ie-c3 {
+  0%, #{$wait-1} { @include bottomright-ie}
+  #{$frame-1}, #{$wait-2} { @include bottomleft-ie}
+  #{$frame-2}, #{$wait-3} { @include topleft-ie}
+  #{$frame-3}, #{$wait-4} { @include topright-ie }
+  #{$frame-4}, 100% { @include bottomright-ie }
+}
+
+@keyframes rods-spinner-ie-c4 {
+  0%, #{$wait-1} { @include bottomleft-ie}
+  #{$frame-1}, #{$wait-2} { @include topleft-ie}
+  #{$frame-2}, #{$wait-3} { @include topright-ie}
+  #{$frame-3}, #{$wait-4} { @include bottomright-ie }
+  #{$frame-4}, 100% { @include bottomleft-ie }
+}
