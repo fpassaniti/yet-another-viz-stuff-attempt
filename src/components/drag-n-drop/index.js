@@ -75,8 +75,8 @@ const loadDnDInTemplate = function(rendering) {
     }, 100); // check every 100ms
 
     let checkExistMetas = setInterval(function () {
-        if ($("#content-card-fields").length) {
-            clearInterval(checkExistMetas);
+        if ($("#content-card-fields").length && (!('metadrop' in app.sortable) || (app.sortable['metadrop'].el != $("#"+app.sortable['metadrop'].el.id)[0]))) {
+            //clearInterval(checkExistMetas);
 
             var ulmetalistdrop = document.getElementById("content-card-fields");
             app.sortable['metadrop'] = new Sortable(ulmetalistdrop, {
@@ -105,11 +105,11 @@ const loadDnDInTemplate = function(rendering) {
     }, 100); // check every 100ms
 
     let checkExistTitle = setInterval(function () {
-        if ($(".content-card-title").length) {
-            clearInterval(checkExistTitle);
+        if ($(".content-card-title").length && !('titledrop' in app.sortable && app.sortable['titledrop'].el == $(".content-card-title")[0])) {
+            //clearInterval(checkExistTitle);
 
             var cardTitleEl = document.getElementsByClassName("content-card-title")[0];
-            app.sortable['metadrop'] = new Sortable(cardTitleEl, {
+            app.sortable['titledrop'] = new Sortable(cardTitleEl, {
                 group: "metas",
                 animation: 350,
                 onMove: function(evt) {
