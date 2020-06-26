@@ -2,26 +2,29 @@ const $ = require("jquery");
 
 const Sortable = require("sortablejs").Sortable;
 
+var imgdropzoneleft = $("<div id=\"content-card-img-dropzone-left\"></div>"),
+    imgdropzonetop  = $("<div id=\"content-card-img-dropzone-top\"></div>");
+
 const loadDnD = function(rendering) {
 
     var ulavailablemetas = document.getElementById("availablemetas");
-
     var ulavailablefilters = document.getElementById("availablefilters");
+    var ulavailableimages = document.getElementById("availableimages");
 
     app.sortable['metapick'] = new Sortable(ulavailablemetas, {
         group: { name: "metas", pull: "clone", put: false},
         animation: 350,
         onStart: function (evt) {
             if (app.metas.indexOf(evt.item.id) < 0) {
-                $("#content-card-fields").addClass("dnd__dropzone");
+                $("#content-card-fields").first().addClass("dnd__dropzone");
             }
             if (app.recordTitle.length <= 0) {
-                $('.content-card-title').addClass("dnd__dropzone");
+                $('.content-card-title').first().addClass("dnd__dropzone");
             }
         },
         onEnd: function (evt) {
-            $("#content-card-fields").removeClass("dnd__dropzone");
-            $('.content-card-title').removeClass("dnd__dropzone");
+            $("#content-card-fields").first().removeClass("dnd__dropzone");
+            $('.content-card-title').first().removeClass("dnd__dropzone");
         }
     });
 
@@ -36,6 +39,69 @@ const loadDnD = function(rendering) {
         },
         onEnd: function (evt) {
             $("#filter-list").removeClass("dnd__dropzone");
+        }
+    });
+
+    app.sortable['imagepick'] = new Sortable(ulavailableimages, {
+        group: { name: "images", pull: "clone", put: false},
+        animation: 350,
+        onStart: function (evt) {
+            if (app.image.length <= 0) {
+                $('.cards-view .content-card').first().append(imgdropzoneleft);
+                $('.cards-view .content-card').first().append(imgdropzonetop);
+            }
+        },
+        onEnd: function (evt) {
+            if ($('.cards-view .content-card').first().find(imgdropzoneleft).length > 0) {
+                imgdropzoneleft.detach();
+            }
+            if ($('.cards-view .content-card').first().find(imgdropzonetop).length > 0) {
+                imgdropzonetop.detach();
+            }
+        }
+    });
+
+    app.sortable['imagedropleft'] = new Sortable(imgdropzoneleft[0], {
+        group: "images",
+        animation: 350,
+        onMove: function(evt) {
+            if (app.image.length > 0) {
+                return false;
+            }
+        },
+        onAdd: function (evt) {
+            console.log('New image drop : ' + evt.item.id);
+            // let img = $(".content-card-img");
+            if (imgdropzoneleft[0] === evt.to && app.image.length <= 0) {
+                app.image = evt.item.id;
+                rendering.renderUpdate('imagePosition','left');
+                rendering.renderUpdate('fieldPhoto',app.image);
+                console.debug('new image: ' + app.image);
+            }
+            evt.item.parentNode.removeChild(evt.item);
+            /*loadDnDInTemplate(rendering);*/
+        }
+    });
+
+    app.sortable['imagedroptop'] = new Sortable(imgdropzonetop[0], {
+        group: "images",
+        animation: 350,
+        onMove: function(evt) {
+            if (app.image.length > 0) {
+                return false;
+            }
+        },
+        onAdd: function (evt) {
+            console.log('New image drop : ' + evt.item.id);
+            // let img = $(".content-card-img");
+            if (imgdropzonetop[0] === evt.to && app.image.length <= 0) {
+                app.image = evt.item.id;
+                rendering.renderUpdate('imagePosition','top');
+                rendering.renderUpdate('fieldPhoto',app.image);
+                console.debug('new image: ' + app.image);
+            }
+            evt.item.parentNode.removeChild(evt.item);
+            /*loadDnDInTemplate(rendering);*/
         }
     });
 
@@ -134,6 +200,36 @@ const loadDnDInTemplate = function(rendering) {
             });
         }
     }, 100); // check every 100ms
+
+    /*let checkExistImg = setInterval(function () {
+        if ($(".content-card-img").length && !('imagedrop' in app.sortable && app.sortable['imagedrop'].el == $(".content-card-img")[0])) {
+
+            var cardImgEl = document.getElementsByClassName("content-card-img")[0];
+            app.sortable['imagedrop'] = new Sortable(cardTitleEl, {
+                group: "images",
+                animation: 350,
+                onMove: function(evt) {
+                    if (app.image.length > 0) {
+                        return false;
+                    }
+                },
+                onEnd: function (evt) {
+                    loadDnDInTemplate(rendering);
+                },
+                onAdd: function (evt) {
+                    console.log('New image drop : ' + evt.item.id);
+                    let img = $(".content-card-img");
+                    if (cardImgEl === evt.to && app.image.length <= 0) {
+                        app.image = evt.item.id;
+                        rendering.renderUpdate('fieldPhoto',app.image);
+                        console.debug('new image: ' + app.image);
+                    }
+                    evt.item.parentNode.removeChild(evt.item);
+                    loadDnDInTemplate(rendering);
+                }
+            });
+        }
+    }, 100); // check every 100ms*/
 };
 
 module.exports = { loadDnD, loadDnDInTemplate };

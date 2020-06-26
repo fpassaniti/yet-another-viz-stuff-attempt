@@ -22,6 +22,9 @@ const reset = () => {
     app.sortable = {};
 
     app.recordTitle = '';
+    app.image = '';
+
+    app.editinplace = {};
 
     app.output = '';
 }
@@ -45,27 +48,3 @@ $("#refresh").on("click", function () {
 
 /***** Export module *****/
 require('./components/export');
-
-/*
-var dummy = require('./components/dummy');
-dummy.dummy_sub_function();
-dummy.dummy_assign();
-*/
-
-
-$("#log").on("click", () => {
-    console.log(app.sortable);
-});
-
-/*
-var waitformetadrop = setInterval(() => {
-    if ('metadrop' in app.sortable && $(app.sortable.metadrop.el).length) {
-        clearInterval(waitformetadrop);
-
-        setInterval(() => {
-            console.log(app.sortable.metadrop.el == document.getElementById("#content-card-fields"));
-        }, 1000);
-    } else {
-        console.log('wait for metadrop');
-    }
-}, 1000);*/

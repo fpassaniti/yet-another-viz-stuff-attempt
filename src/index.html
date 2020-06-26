@@ -22,17 +22,12 @@
 <div class="">
     <div class="col-md-3 builder">
         <h1 class="centered">
-            Viz Builder
+            Page Builder
         </h1>
+        <h3>
+            A simple GUI over listing generator template
+        </h3>
         <ul class="list-group">
-            <li class="list-group-item">
-                <label>
-                    Template:
-                </label>
-                <select id="template">
-                    <option>list-gen</option>
-                </select>
-            </li>
             <li class="list-group-item">
                 <div class="form-group">
                     <label>Dataset selection</label>
@@ -41,22 +36,20 @@
                 <div class="selection"></div>
             </li>
             <li class="list-group-item">
-                <div class="row">
-                    <div class="col-sm">
-                        <h5>
-                            Available fields
-                        </h5>
+                        <h6>
+                            Available fields:
+                        </h6>
                         <ul id="availablemetas" class="fields"></ul>
-                    </div>
-                    <div class="col-sm">
-                        <h5>
-                            Available filters
-                        </h5>
+                        <h6>
+                            Available filters:
+                        </h6>
                         <ul id="availablefilters" class="fields"></ul>
-                    </div>
-                </div>
+                        <h6>
+                            Available images:
+                        </h6>
+                        <ul id="availableimages" class="fields"></ul>
             </li>
-            <li class="list-group-item">
+            <!--li class="list-group-item">
                 <label>
                     View:
                 </label>
@@ -64,7 +57,7 @@
                     <option>cards</option>
                     <option>table</option>
                 </select>
-            </li>
+            </li-->
             <li class="list-group-item">
                 <div class="centered">
                     <input class="btn btn-outline-secondary" type="button" id="quill-on" value="Enable WYSIWYG" />
@@ -73,12 +66,12 @@
             </li>
             <li class="list-group-item">
                 <div class="centered">
-                    <input class="btn btn-outline-secondary"
+                    <!--<input class="btn btn-outline-secondary"
                            type="button" id="log" value="Log"/>
                     <input class="btn btn-outline-secondary"
                            type="button" id="test" value="test"/>
                     <input class="btn btn-outline-secondary"
-                           type="button" id="refresh" value="Refresh"/>
+                           type="button" id="refresh" value="Refresh"/>-->
                     <input class="btn btn-outline-secondary"
                            type="button" id="copy" value="Copy HTML to clipboard"/>
                 </div>

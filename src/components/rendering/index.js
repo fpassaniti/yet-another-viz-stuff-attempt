@@ -6,7 +6,7 @@ const renderInit = function () {
     var settings = {};
 
     settings["datasetid"] = app.datasetid;
-    settings["view"] = document.getElementById("view").value;
+    settings["view"] = "cards"; //document.getElementById("view").value;
 
     settings["filters"] = '[]';
     settings["fields"] = '[]';

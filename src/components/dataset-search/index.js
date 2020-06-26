@@ -3,12 +3,11 @@ const autoComplete = require("@tarekraafat/autocomplete.js/dist/js/autoComplete"
 var dnd = require('../../components/drag-n-drop');
 var rendering = require('../../components/rendering');
 const wysiwyg = require('../../components/wysiwyg');
-
+const editinplace = require('../../components/edit-in-place');
 
 const loadAC = function (dnd, reset) {
     app.ac = new autoComplete({
         data: {
-            // Data src [Array, Function, Async] | (REQUIRED)
             src: async () => {
                 const query = document.querySelector("#autoComplete").value;
                 const source = await fetch(
@@ -21,9 +20,9 @@ const loadAC = function (dnd, reset) {
             cache: false
         },
         placeHolder: "Search...", // Place Holder text                 | (Optional)
-        threshold: 3, // Min. Chars length to start Engine | (Optional)
+        threshold: 0, // Min. Chars length to start Engine | (Optional)
         debounce: 300, // Post duration for engine to start | (Optional)
-        searchEngine: "strict", // Search Engine type/mode           | (Optional)
+        searchEngine: function(query,record) { return true }, //"loose", // Search Engine type/mode           | (Optional)
         maxResults: 10, // Max. number of rendered results | (Optional)
         resultsList: {
             render: true,
@@ -36,7 +35,7 @@ const loadAC = function (dnd, reset) {
         },
         resultItem: {
             content: function (data, source) {
-                source.innerHTML = data.value.metas.title;
+                source.innerHTML = data.value.metas.title + ' (' + data.value.metas.source_domain_title + ')';
             },
             element: "li"
         },
@@ -66,10 +65,13 @@ const loadAC = function (dnd, reset) {
             availablefilters.html("");
             var availablemetas = $("#availablemetas");
             availablemetas.html("");
+            var availableimages = $("#availableimages");
+            availableimages.html("");
 
             rendering.renderInit();
             dnd.loadDnD(rendering);
             wysiwyg.loadWYSIWYG();
+            editinplace.loadEIP(rendering);
 
             feedback.selection.value.fields.forEach(function (field) {
                 var li = document.createElement("li");
@@ -77,19 +79,26 @@ const loadAC = function (dnd, reset) {
                 li.id = field.name;
                 li.innerText = field.label;
 
-                /* For each field, create a meta */
                 availablemetas.append(li);
 
                 if (field['annotations'] && field.annotations.length > 0) {
-                    let found = field.annotations.find(function (annotation) {
+                    let facet = field.annotations.find(function (annotation) {
                         return annotation.name.indexOf("facet") >= 0;
                     });
-                    if (found) {
-                        let lif = li.cloneNode(true);
-                        lif.className = "field filter";
-                        availablefilters.append(lif);
+                    if (facet) {
+                        let licopy = li.cloneNode(true);
+                        licopy.className = "field filter";
+                        availablefilters.append(licopy);
                     }
-                    // availablefilters.find("#" + field.id).length
+
+                    let image = field.annotations.find(function (annotation) {
+                        return annotation.name.indexOf("has_thumbnails") >= 0;
+                    });
+                    if (image) {
+                        let licopy = li.cloneNode(true);
+                        licopy.className = "field image";
+                        availableimages.append(licopy);
+                    }
                 }
             });
         }

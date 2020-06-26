@@ -50,7 +50,6 @@ const loadWYSIWYG = function () {
 
             var updateHtmlOutput = function () {
                 app.ouput = $($(app.output)).find('#intro').html(getQuillHtml());
-                console.log(app.output);
             };
 
             quill.on('text-change', function (delta, source) {

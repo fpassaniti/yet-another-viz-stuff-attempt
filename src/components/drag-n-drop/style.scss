@@ -1,15 +1,30 @@
 .list-group-item {
   padding: .35rem 1rem;
+
+  .fields {
+    display: flex;
+    flex-wrap: wrap;
+
+    .field {
+      height: 100%;
+      width: 46%;
+      margin: 0 2% 2px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
 }
 
-.fields, .filter-list, .content-card-fields, .content-card-title {
+.fields,
+.filter-list,
+.content-card-fields,
+.content-card-title {
   width: 100%;
   list-style: none;
   padding-left: 0;
 
   .field {
     padding: .37rem 1rem;
-    margin-bottom: 0.2em;
     font-size: 1rem;
     color: var(--text);
     background-color: white;
@@ -50,5 +65,41 @@
   &.content-card-title {
     max-width: 70%;
     margin: 0 auto 10px auto;
+  }
+}
+
+@mixin image-field {
+  width: 100%;
+  height: 100%;
+  list-style: none;
+  padding: .37rem 1rem;
+  font-size: 1rem;
+  color: white;
+  background-color: var(--highlight);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border: 1px solid #cbd2db;
+  transition: all .2s;
+}
+
+#content-card-img-dropzone-left {
+  position: absolute;
+  width: 20%;
+  top: 0;
+  bottom: 0;
+  border: 2px dashed;
+  .field {
+    @include image-field;
+  }
+}
+
+#content-card-img-dropzone-top {
+  position: absolute;
+  height: 50px;
+  left: 0;
+  right: 0;
+  border: 2px dashed;
+  .field {
+    @include image-field;
   }
 }
